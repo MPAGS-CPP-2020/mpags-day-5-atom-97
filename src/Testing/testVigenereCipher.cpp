@@ -1,11 +1,10 @@
-//! Unit Tests for MPAGSCipher CaesarCipher Class
+//! Unit Tests for MPAGSCipher VigenereCipher Class
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
 #include "VigenereCipher.hpp"
 
 
-//change the output string
 TEST_CASE("Vigenere Cipher encryption", "[playfair]") {
   VigenereCipher cc{"vigeneretest"};
   REQUIRE( cc.applyCipher("YOUDBETTERWORKORILLHAVETODEBUGTHISABOUTFIVETIMESIDMUCHRATHERHAVELUNCH", CipherMode::Encrypt) == "TWAHOIKXXVOHMSUVVPCLTZWMJLKFHKKLBWSUJCZJVZVXBQWLDLSYPLIEMLWKCIBIYYEGA");

@@ -8,6 +8,7 @@
 // Our project headers
 #include "CipherMode.hpp"
 #include "CaesarCipher.hpp"
+#include "Cipher.hpp"
 
 /**
  * \file VigenereCipher.hpp
@@ -18,7 +19,7 @@
  * \class VigenereCipher
  * \brief Encrypt or decrypt text using the Vigenere (Bellaso) cipher with the given key
  */
-class VigenereCipher {
+class VigenereCipher : public Cipher {
   public:
 
     /**
@@ -42,7 +43,7 @@ class VigenereCipher {
      * \param cipherMode whether to encrypt or decrypt the input text
      * \return the result of applying the cipher to the input text
      */
-    std::string applyCipher( const std::string& inputText, const CipherMode& cipherMode ) const;
+    std::string applyCipher( const std::string& inputText, const CipherMode cipherMode ) const override;
 
   private:
     /// The cipher key
@@ -51,8 +52,8 @@ class VigenereCipher {
     /// Cipher key length
     size_t keySize_;
     
-    /// Lookuptable storing instances of the Caesar cipher for each char in the key
-    std::map<char, CaesarCipher> charLookup_;
+    /// Lookuptable storing a key for the Caesar cipher for each char in the key
+    std::map<char, size_t> charLookup_;
 };
 
 #endif

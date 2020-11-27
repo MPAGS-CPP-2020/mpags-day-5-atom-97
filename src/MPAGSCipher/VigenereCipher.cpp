@@ -17,6 +17,10 @@ void VigenereCipher::setKey( const std::string& key)
     // Store the key
     key_=key;
 
+    // Remove non-alphabet characters
+    key_.erase( std::remove_if( std::begin(key_), std::end(key_), [](char c){ return !std::isalpha(c); } ),
+              std::end(key_) );
+
     // Make sure the key is uppercase 
     std::transform( std::begin(key_), std::end(key_), std::begin(key_), ::toupper );
 
@@ -29,21 +33,29 @@ void VigenereCipher::setKey( const std::string& key)
     // Set the key length
     keySize_=key_.size();
 
+    // Clean up the lookup map
+    charLookup_.clear();
+
+    // Create char to ensure the map does not contain copies
+    std::string processedLetters{""};
+
     // loop over the chars in the key
     for ( char c: key_){
+
+        // skip if the letter was already processed and add to the list if it was not
+        if (processedLetters.find(c)!=std::string::npos) continue;
+        processedLetters += c;
+
         // Find the letter position in the alphabet
         size_t pos = Alphabet::alphabet.find(c);
 
-        // Create a Caesar cipher using this position as a key
-        CaesarCipher caesar{pos};
-
         // Insert an std::pair of the letter and CaesarCipher into the lookup map
-        charLookup_.insert( std::pair<char,CaesarCipher>(c,caesar) );
+        charLookup_.insert( std::pair<char,size_t>(c,pos) );
     }
 
 }
 
-std::string VigenereCipher::applyCipher( const std::string& inputText, const CipherMode& mode) const
+std::string VigenereCipher::applyCipher( const std::string& inputText, const CipherMode mode) const
 {
     // Set up an output string as input is a const
     std::string outputText{""};
@@ -53,8 +65,8 @@ std::string VigenereCipher::applyCipher( const std::string& inputText, const Cip
         // Find the corresponding in the key repeating/truncating as required
         char key_char = key_[i%keySize_];
 
-        // Find the Caesar cpher from the lookup map
-        CaesarCipher subcipher = charLookup_.at(key_char);
+        // Find the Caesar cipher key from the lookup map and instantiate a method
+        CaesarCipher subcipher {charLookup_.at(key_char)};
 
         // Cast the manipulated char to string to allow for cipher handling
         std::string s{inputText[i]};
