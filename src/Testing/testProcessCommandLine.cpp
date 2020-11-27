@@ -138,3 +138,13 @@ TEST_CASE("Cipher type declared with Playfair cipher"){
   REQUIRE( res );
   REQUIRE( prog_set.cipherType == CipherType::Playfair);
 }
+
+TEST_CASE("Cipher type declared with Vigenere(Bellaso) cipher"){
+  
+  ProgramSettings prog_set{false, false, "", "", "", CipherMode::Encrypt, CipherType::Caesar};
+  std::vector<std::string> cmd_line = {"mpags-cipher", "-c", "vigenere"};
+  bool res = processCommandLine(cmd_line, prog_set);
+
+  REQUIRE( res );
+  REQUIRE( prog_set.cipherType == CipherType::Vigenere);
+}

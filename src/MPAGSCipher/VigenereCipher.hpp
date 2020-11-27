@@ -3,10 +3,11 @@
 
 // Standard library includes
 #include <string>
-
+#include <map>
 
 // Our project headers
 #include "CipherMode.hpp"
+#include "CaesarCipher.hpp"
 
 /**
  * \file VigenereCipher.hpp
@@ -44,8 +45,14 @@ class VigenereCipher {
     std::string applyCipher( const std::string& inputText, const CipherMode& cipherMode ) const;
 
   private:
-    /// The cipher key, essentially a constant shift to be applied
-    std::string key_ = 0;
+    /// The cipher key
+    std::string key_;
+
+    /// Cipher key length
+    size_t keySize_;
+    
+    /// Lookuptable storing instances of the Caesar cipher for each char in the key
+    std::map<char, CaesarCipher> charLookup_;
 };
 
 #endif
